@@ -79,7 +79,7 @@ To build and run this framework, your system must meet the following requirement
 
 ## Data Analysis
 
-The repository includes Python scripts in the `/scripts` directory to parse ROS bags and visualize telemetry data. Tools like `plot_trajectories.py` can plot 3D trajectories, velocity profiles, and inter-agent distances to mathematically validate the controller's performance against theoretical expectations.
+The repository includes Python scripts in the [/scripts](/scripts) directory to parse ROS bags and visualize telemetry data. Tools like [plot_trajectories.py](plot_trajectories.py) can plot 3D trajectories, velocity profiles, and inter-agent distances to mathematically validate the controller's performance against theoretical expectations.
 
 ## License
 
