@@ -1,0 +1,50 @@
+# ROS 2 & Colcon Workspace Build Directories
+
+build/
+install/
+log/
+*/build/
+*/install/
+*/log/
+
+# C++ & CMake Artifacts
+
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+*.o
+*.a
+*.so
+*.dylib
+*.out
+
+# Python Caches & Environments
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+venv/
+env/
+.env
+
+# ROS Bags (Telemetry Data) & Simulation Logs
+
+*.db3
+*.mcap
+rosbag2*/
+.gazebo/
+gazebo_logs/
+
+# IDEs & OS Specific (VS Code, Linux, etc.)
+
+.vscode/
+.idea/
+.DS_Store
+*~
+*.swp
+*.swo
+compile_commands.json
