@@ -23,7 +23,7 @@ Unlike black-box AI approaches, this framework guarantees mathematically provabl
 
 The repository is structured following standard ROS 2 best practices, divided into three core packages that work together to simulate the swarm:
 
-### 1. `swarm_control` (The Brain)
+### 1. [swarm_control](swarm_control) (The Brain)
 This package acts as the decentralized controller for the UAV swarm.
 *   **Architecture:** Each UAV runs an independent instance of the control node (`swarm_controller_node`), ensuring a truly decentralized system.
 *   **Implementation:** Written in C++17 for real-time performance, utilizing the `Eigen3` library for efficient matrix operations and state-space calculations.
