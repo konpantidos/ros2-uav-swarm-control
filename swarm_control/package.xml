@@ -1,1 +1,24 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>swarm_control</name>
+  <version>0.0.0</version>
+  <description>C++ Decentralized Swarm Controller using APF</description>
+  <maintainer email="kon.pantidos@gmail.com">Konstantinos</maintainer>
+  <license>MIT</license>
 
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>swarm_interfaces</depend>
+
+  <!-- Eigen3 for Matrix/Vector math -->
+  <build_depend>eigen3_cmake_module</build_depend>
+  <build_export_depend>eigen3_cmake_module</build_export_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
