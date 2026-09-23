@@ -16,33 +16,40 @@ This project provides a highly modular, multi-agent simulation framework for Unm
 Unlike black-box AI approaches, this framework guarantees mathematically provable stability, making it ideal for safety-critical aerospace applications. The architecture explicitly decouples the mathematical control logic from the simulation engine, ensuring a seamless transition path from software simulation to Hardware-In-The-Loop (HITL) testing.
 
 <p align="center">
-  <!-- TODO: προσθήκη ενός GIF εδώ όταν τρέξει η προσομοίωση -->
   <i>[Placeholder: A GIF demonstrating the swarm successfully navigating through obstacles in Gazebo will be placed here.]</i>
 </p>
 
-## System Architecture
+## System Architecture & Packages
 
-The repository is structured following standard ROS 2 best practices, divided into three core packages:
+The repository is structured following standard ROS 2 best practices, divided into three core packages that work together to simulate the swarm:
 
-*   **`swarm_control`**: The C++ "brain" of the operation. Contains the decentralized algorithms using `Eigen3` for real-time matrix operations and state-space calculations.
-*   **`swarm_sim`**: The Python-based physical simulation package linking the control inputs to the Gazebo physics engine via custom URDF/SDF models.
-*   **`swarm_interfaces`**: A standalone `ament_cmake` package defining the custom `.msg` structures used for inter-UAV telemetry and state sharing.
+### 1. `swarm_control` (The Brain)
+This package acts as the decentralized controller for the UAV swarm.
+*   **Architecture:** Each UAV runs an independent instance of the control node (`swarm_controller_node`), ensuring a truly decentralized system.
+*   **Implementation:** Written in C++17 for real-time performance, utilizing the `Eigen3` library for efficient matrix operations and state-space calculations.
+*   **Logic:** Computes the optimal velocity vector based on local information, target attraction, and obstacle repulsion.
 
-For a detailed view of the system's architecture and the mathematical proofs governing the swarm dynamics, please refer to the documents in the `/docs` directory.
+### 2. `swarm_interfaces` (Communication)
+A standalone `ament_cmake` package defining the custom ROS 2 messages (`.msg`) used for inter-UAV telemetry and state sharing.
+*   **`DroneState.msg`:** Contains essential state variables (Agent ID, Position, Velocity, Status) exchanged between neighbors to maintain swarm consensus.
+
+### 3. `swarm_sim` (Physics & Simulation)
+An `ament_python` package handling the physical simulation within the Gazebo environment.
+*   **Integration:** Links the control inputs to the Gazebo physics engine via custom URDF/SDF models.
+*   **Contents:** Contains Python-based launch files to spawn the multi-agent system and world files defining the obstacle courses.
 
 ## Mathematical Foundation
 
-At the core of the navigation logic is a decentralized Artificial Potential Field controller. Each UAV continuously computes its local velocity vector $\vec{v}_i$ based on:
+At the core of the navigation logic is a decentralized Artificial Potential Field controller. Each UAV continuously computes its local velocity vector based on:
 1.  An attractive force towards the global target.
-2.  Repulsive forces from static/dynamic obstacles.
-3.  Consensus-based repulsive/attractive forces to maintain formation with neighboring UAVs.
+2.  Repulsive forces from static and dynamic obstacles.
+3.  Consensus-based forces to maintain formation with neighboring UAVs.
 
 The complete mathematical derivations, including stability analysis, are available in [`docs/mathematical_model.pdf`](./docs/mathematical_model.pdf).
 
 ## Prerequisites & Dependencies
 
 To build and run this framework, your system must meet the following requirements:
-
 *   **OS:** Ubuntu 22.04 LTS (Native or via WSL2)
 *   **Middleware:** ROS 2 Humble Hawksbill
 *   **Simulation:** Gazebo Ignition / Classic
@@ -51,8 +58,29 @@ To build and run this framework, your system must meet the following requirement
 
 ## Installation & Quick Start
 
-**1. Clone the repository into a ROS 2 workspace:**
-```bash
-mkdir -p ~/uav_swarm_ws/src
-cd ~/uav_swarm_ws/src
-git clone [https://github.com/konpantidos/uav_swarm_control.git](https://github.com/konpantidos/uav_swarm_control.git) .
+1. Clone the repository into a ROS 2 workspace:
+    mkdir -p ~/uav_swarm_ws/src
+    cd ~/uav_swarm_ws/src
+    git clone https://github.com/YourUsername/uav_swarm_control.git .
+
+2. Install dependencies (rosdep):
+    cd ~/uav_swarm_ws
+    rosdep update
+    rosdep install --from-paths src --ignore-src -r -y
+
+3. Build the workspace:
+    colcon build --symlink-install
+
+4. Source and Launch:
+    source install/setup.bash
+    ros2 launch swarm_sim main_launch.py
+
+*(Note: Launch file implementation is currently under active development).*
+
+## Data Analysis
+
+The repository includes Python scripts in the `/scripts` directory to parse ROS bags and visualize telemetry data. Tools like `plot_trajectories.py` can plot 3D trajectories, velocity profiles, and inter-agent distances to mathematically validate the controller's performance against theoretical expectations.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
