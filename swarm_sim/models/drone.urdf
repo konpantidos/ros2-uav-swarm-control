@@ -19,4 +19,18 @@
       <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.02"/>
     </inertial>
   </link>
+<gazebo>
+    <plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
+      <ros>
+        <namespace></namespace>
+        <remapping>cmd_vel:=cmd_vel</remapping>
+        <remapping>odom:=odom</remapping>
+      </ros>
+      <command_topic>cmd_vel</command_topic>
+      <odometry_topic>odom</odometry_topic>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_link</robot_base_frame>
+      <odometry_rate>20.0</odometry_rate>
+    </plugin>
+  </gazebo>
 </robot>
