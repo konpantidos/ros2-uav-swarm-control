@@ -23,9 +23,9 @@ def plot_bag_data(bag_db_path):
         ax.scatter(x[-1], y[-1], z[-1], color='r', marker='o', s=50, label='Final Position')
         ax.scatter(0, 0, 5, color='k', marker='x', s=100, label='Obstacle')
 
-        ax.set_xlabel('X Position (cm)')
-        ax.set_ylabel('Y Position (cm)')
-        ax.set_zlabel('Altitude (cm)')
+        ax.set_xlabel('X Position (m)')
+        ax.set_ylabel('Y Position (m)')
+        ax.set_zlabel('Altitude (m)')
         ax.set_title('UAV Swarm 3D Trajectory & Obstacle Avoidance')
         ax.legend()
         ax.grid(True)
