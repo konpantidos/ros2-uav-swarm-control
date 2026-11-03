@@ -6,6 +6,7 @@
 #include <swarm_interfaces/msg/drone_state.hpp>
 #include <Eigen/Dense>
 #include <vector>
+#include "nav_msgs/msg/odometry.hpp"
 
 class SwarmController : public rclcpp::Node {
 public:
@@ -13,7 +14,7 @@ public:
 
 private:
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr velocity_pub_;
-    rclcpp::Subscription<swarm_interfaces::msg::DroneState>::SharedPtr state_sub_;
+ rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
     rclcpp::TimerBase::SharedPtr control_timer_;
 
     Eigen::Vector3d current_position_;
@@ -29,7 +30,7 @@ private:
     double influence_radius_;     
     std::vector<Eigen::Vector3d> obstacles_; 
 
-    void state_callback(const swarm_interfaces::msg::DroneState::SharedPtr msg);
+    void odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg);
     void compute_and_publish_velocity();
     
     Eigen::Vector3d calculate_attractive_force();
