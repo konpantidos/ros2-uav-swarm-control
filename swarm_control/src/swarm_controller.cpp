@@ -1,12 +1,13 @@
 #include "swarm_control/swarm_controller.hpp"
 #include <cmath>
+#include "nav_msgs/msg/odometry.hpp"
 
 using std::placeholders::_1;
 
 SwarmController::SwarmController() : Node("swarm_controller_node") {
     // 1. Initialize Control Parameters
-    k_attractive_ = 1.5; 
-    max_velocity_ = 2.0; 
+    k_attractive_ = 0.5; 
+    max_velocity_ = 0.5; 
     
     // Repulsive Parameters
     k_repulsive_ = 5.0;       
@@ -21,8 +22,8 @@ SwarmController::SwarmController() : Node("swarm_controller_node") {
     // 2. Initialize Publishers and Subscribers
     velocity_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
     
-    state_sub_ = this->create_subscription<swarm_interfaces::msg::DroneState>(
-        "drone_state", 10, std::bind(&SwarmController::state_callback, this, _1));
+   odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
+    "odom", 10, std::bind(&SwarmController::odom_callback, this, _1));
 
     // 3. Control Loop Timer (50Hz)
     control_timer_ = this->create_wall_timer(
@@ -32,9 +33,10 @@ SwarmController::SwarmController() : Node("swarm_controller_node") {
     RCLCPP_INFO(this->get_logger(), "Swarm Controller Node Initialized with APF Avoidance.");
 }
 
-void SwarmController::state_callback(const swarm_interfaces::msg::DroneState::SharedPtr msg) {
-    current_position_ << msg->x, msg->y, msg->z;
-    current_velocity_ << msg->vx, msg->vy, msg->vz;
+void SwarmController::odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg) {
+    current_position_ << msg->pose.pose.position.x, 
+                         msg->pose.pose.position.y, 
+                         msg->pose.pose.position.z;
 }
 
 Eigen::Vector3d SwarmController::calculate_attractive_force() {
@@ -83,8 +85,8 @@ void SwarmController::compute_and_publish_velocity() {
 }
 
 int main(int argc, char **argv) {
-    rclcpp::init(argc, argv);
-    auto node = std::make_shared<SwarmController>();
+rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
+void odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg);
     rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
